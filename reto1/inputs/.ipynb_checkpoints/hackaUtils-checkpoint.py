@@ -110,51 +110,9 @@ def generate_hist(dataset, field):
 
 #%%
 def count_record_per_class(dataset, field):
-    '''
-    Cuenta cuantos registros hay por clase en cada campo, retorna la lista
-    que indica cuantos valores hay por clase
-    '''
-    print("\n\nField values (%): ",field)
+    print("Field: ",field)
     print(dataset[field].value_counts(normalize=True, dropna=False))
     
-    print("Field values (value): ",field)
-    props = dataset[field].value_counts(normalize=False, dropna=False)
-    print(props)
-    return props
-    
-
-#%%
-def get_minor_classes(props, position):
-    '''
-    Obtener las clases de los valores menos dominantes por campo,
-    a partir de un indice
-    '''
-    classes = []
-    for index in range(position, len(props)):
-        classes.append(props.index[index])
-    
-    return classes
-
-#%%
-def replace_minority_values(dataset, field, classes, new_class):
-    '''
-    Reemplaza los valores en clases minoritarias, por una clase general
-    '''
-    dt = dataset
-    #dt[field].replace(to_replace = classes, value = new_class)
-
-    for index in range(0,dt.shape[0]):
-        value = dt[field][index]
-        if(value in classes):
-            dt[field][index] = new_class
-        elif(None in classes):
-            if(pd.isnull(value)):
-                dt[field][index] = new_class
-        
-    return dt
-
-    
-
                 
         
 
