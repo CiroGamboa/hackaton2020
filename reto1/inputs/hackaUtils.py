@@ -117,7 +117,7 @@ def count_record_per_class(dataset, field):
     print("\n\nField values (%): ",field)
     print(dataset[field].value_counts(normalize=True, dropna=False))
     
-    print("Field values (value): ",field)
+    print("\nField values (value): ",field)
     props = dataset[field].value_counts(normalize=False, dropna=False)
     print(props)
     return props
@@ -131,7 +131,11 @@ def get_minor_classes(props, position):
     '''
     classes = []
     for index in range(position, len(props)):
-        classes.append(props.index[index])
+        class_value = props.index[index]
+        if(pd.isnull(class_value)):
+            classes.append(None)
+        else:
+            classes.append(props.index[index])
     
     return classes
 
@@ -140,24 +144,78 @@ def replace_minority_values(dataset, field, classes, new_class):
     '''
     Reemplaza los valores en clases minoritarias, por una clase general
     '''
-    dt = dataset
-    #dt[field].replace(to_replace = classes, value = new_class)
 
-    for index in range(0,dt.shape[0]):
-        value = dt[field][index]
+    for index in range(0,dataset.shape[0]):
+        value = dataset[field][index]
         if(value in classes):
-            dt[field][index] = new_class
+            dataset.at[index, field] = new_class
         elif(None in classes):
             if(pd.isnull(value)):
-                dt[field][index] = new_class
-        
-    return dt
+                dataset.at[index, field] = new_class
+            
+#%%
+def replace_nan(dataset, field, nan_class):
+
+    '''
+    Esto funciona
+    
+    for index in range(0,dataset.shape[0]):
+        value = dataset[field][index]
+        if(pd.isnull(value)):
+            dataset.at[index, field] = new_class    
+    '''
+    dataset[field].fillna(nan_class, inplace=True)
+    #dataset.loc[pd.isnull(dataset[field])] = new_class
 
     
+#%%
+def replace_empty_lists(dataset, field, new_class):
+    
+    '''
+    Esto funciona
+    
+    for index in range(0,dataset.shape[0]):
+        value = dataset[field][index]
+        if(value == '[]'):
+            dataset.at[index, field] = new_class    
+    '''
+    
+    dataset.loc[dataset[field] == '[]'] = new_class           
+            
 
-                
+#%%
+def get_dist_cont_values(dataset, field, avoid_class):
+    values = dataset.loc[dataset[field] != avoid_class, field]
+    
+    df = pd.DataFrame(values)
+    return values
+    #df.hist()
+    #ax = values.hist(bins = 100,alpha=0.5)
+    
+
+#%%
+def get_stats(dataset, field):
+    pass
         
 
+
+#%%
+def find_jump(values):
+    
+    diff = 0
+    prev = values[0]
+    prejump = 0
+    posjump = 0
+    for val in values:
+        if(abs(val-prev) > diff):
+            diff = abs(val-prev)
+            prejump = prev
+            posjump = val
+        prev = val
+    
+    return prejump, posjump, diff
+            
+        
 
 
 
