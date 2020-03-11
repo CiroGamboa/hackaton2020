@@ -187,7 +187,7 @@ def replace_empty_lists(dataset, field, new_class):
 def get_dist_cont_values(dataset, field, avoid_class):
     values = dataset.loc[dataset[field] != avoid_class, field]
     
-    df = pd.DataFrame(values)
+    #df = pd.DataFrame(values)
     return values
     #df.hist()
     #ax = values.hist(bins = 100,alpha=0.5)
@@ -214,9 +214,25 @@ def find_jump(values):
         prev = val
     
     return prejump, posjump, diff
-            
-        
 
+#%%
+def count_records_in_json(record):
+    import json
+    
+    json_record = json.loads(record)
+    return len(json_record)
+
+
+
+#%%
+def replace_with_len(dataset, field, zero_class):
+    for index in range(0,dataset.shape[0]):
+        value = dataset.at[index,field]    
+        if(value != zero_class):
+            count = count_records_in_json(value)
+        else:
+            count = 0
+        dataset.at[index,field] = count
 
 
 
