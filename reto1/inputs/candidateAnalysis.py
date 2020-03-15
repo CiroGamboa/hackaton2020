@@ -6,7 +6,7 @@ dt_name = 'Candidates'
 dataset = hackaUtils.get_dataset([dt_name])[dt_name]
 
 
-#%% Seleccionar los campos clave
+#%% Eliminar campos
 columns = ['title_or_profession','available_to_move','civil_status','has_video','profile_description','birthdate','identification_type','identification_number','psy_tests','email','first_name','last_name','phone','country_birth','salary']
 filtered_dt = hackaUtils.drop_columns(dataset, columns)
 
