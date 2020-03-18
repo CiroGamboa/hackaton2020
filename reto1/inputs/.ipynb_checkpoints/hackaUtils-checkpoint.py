@@ -57,7 +57,7 @@ def _process_csv_dataset(dataset_name, dataset_columns):
 
 def count_empty_records(dataset):
     '''
-    Contar cuantos registros estan en NaN por cada campo
+    Contar cuantos registros estan en NaN por cada campo o son listas vacias
     '''
     total_records = dataset.shape[0]
     print("\t\tMissing data per field")
@@ -76,7 +76,45 @@ def count_empty_records(dataset):
      #   print(str(item[1]) + "\t\t\t" + str(round(item[1]*100/total_records)) + "%" + "\t\t" + item[0])
 
 
+#%%
+def drop_columns(dataset, columns):
+    dt = dataset.copy()
+    dt.drop(columns=columns, axis=1, inplace=True)       
+    return dt
 
+
+
+#%%
+def count_empty_lists(dataset):
+    print("Empty lists")
+    total_records = dataset.shape[0]
+    print("Total records\t\t", total_records)
+    print("Missing data\t\t% of total\tField name(" + str(dataset.shape[1]) + ")")
+    for (columnName, columnData) in dataset.iteritems():
+        line = ""
+        #add = ""
+        count  = 0
+        for value in columnData.values:
+            if(value == '[]'):
+                count += 1
+
+        line = str(count)
+        line += '\t\t\t' + str(round(count*100/total_records)) + '%'
+        line += '\t\t' +  columnName
+        print(line)
+            
+
+#%% 
+def generate_hist(dataset, field):
+    dataset.hist(column = field)
+
+#%%
+def count_record_per_class(dataset, field):
+    print("Field: ",field)
+    print(dataset[field].value_counts(normalize=True, dropna=False))
+    
+                
+        
 
 
 

@@ -57,7 +57,7 @@ def _process_csv_dataset(dataset_name, dataset_columns):
 
 def count_empty_records(dataset):
     '''
-    Contar cuantos registros estan en NaN por cada campo
+    Contar cuantos registros estan en NaN por cada campo o son listas vacias
     '''
     total_records = dataset.shape[0]
     print("\t\tMissing data per field")
@@ -76,9 +76,163 @@ def count_empty_records(dataset):
      #   print(str(item[1]) + "\t\t\t" + str(round(item[1]*100/total_records)) + "%" + "\t\t" + item[0])
 
 
+#%%
+def drop_columns(dataset, columns):
+    dt = dataset.copy()
+    dt.drop(columns=columns, axis=1, inplace=True)       
+    return dt
 
 
 
+#%%
+def count_empty_lists(dataset):
+    print("Empty lists")
+    total_records = dataset.shape[0]
+    print("Total records\t\t", total_records)
+    print("Missing data\t\t% of total\tField name(" + str(dataset.shape[1]) + ")")
+    for (columnName, columnData) in dataset.iteritems():
+        line = ""
+        #add = ""
+        count  = 0
+        for value in columnData.values:
+            if(value == '[]'):
+                count += 1
+
+        line = str(count)
+        line += '\t\t\t' + str(round(count*100/total_records)) + '%'
+        line += '\t\t' +  columnName
+        print(line)
+            
+
+#%% 
+def generate_hist(dataset, field):
+    dataset.hist(column = field)
+
+#%%
+def count_record_per_class(dataset, field):
+    '''
+    Cuenta cuantos registros hay por clase en cada campo, retorna la lista
+    que indica cuantos valores hay por clase
+    '''
+    print("\n\nField values (%): ",field)
+    print(dataset[field].value_counts(normalize=True, dropna=False))
+    
+    print("\nField values (value): ",field)
+    props = dataset[field].value_counts(normalize=False, dropna=False)
+    print(props)
+    return props
+    
+
+#%%
+def get_minor_classes(props, position):
+    '''
+    Obtener las clases de los valores menos dominantes por campo,
+    a partir de un indice
+    '''
+    classes = []
+    for index in range(position, len(props)):
+        class_value = props.index[index]
+        if(pd.isnull(class_value)):
+            classes.append(None)
+        else:
+            classes.append(props.index[index])
+    
+    return classes
+
+#%%
+def replace_minority_values(dataset, field, classes, new_class):
+    '''
+    Reemplaza los valores en clases minoritarias, por una clase general
+    '''
+
+    for index in range(0,dataset.shape[0]):
+        value = dataset[field][index]
+        if(value in classes):
+            dataset.at[index, field] = new_class
+        elif(None in classes):
+            if(pd.isnull(value)):
+                dataset.at[index, field] = new_class
+            
+#%%
+def replace_nan(dataset, field, nan_class):
+
+    '''
+    Esto funciona
+    
+    for index in range(0,dataset.shape[0]):
+        value = dataset[field][index]
+        if(pd.isnull(value)):
+            dataset.at[index, field] = new_class    
+    '''
+    dataset[field].fillna(nan_class, inplace=True)
+    #dataset.loc[pd.isnull(dataset[field])] = new_class
+
+    
+#%%
+def replace_empty_lists(dataset, field, new_class):
+    
+    '''
+    Esto funciona
+    
+    for index in range(0,dataset.shape[0]):
+        value = dataset[field][index]
+        if(value == '[]'):
+            dataset.at[index, field] = new_class    
+    '''
+    
+    dataset.loc[dataset[field] == '[]'] = new_class           
+            
+
+#%%
+def get_dist_cont_values(dataset, field, avoid_class):
+    values = dataset.loc[dataset[field] != avoid_class, field]
+    
+    #df = pd.DataFrame(values)
+    return values
+    #df.hist()
+    #ax = values.hist(bins = 100,alpha=0.5)
+    
+
+#%%
+def get_stats(dataset, field):
+    pass
+        
+
+
+#%%
+def find_jump(values):
+    
+    diff = 0
+    prev = values[0]
+    prejump = 0
+    posjump = 0
+    for val in values:
+        if(abs(val-prev) > diff):
+            diff = abs(val-prev)
+            prejump = prev
+            posjump = val
+        prev = val
+    
+    return prejump, posjump, diff
+
+#%%
+def count_records_in_json(record):
+    import json
+    
+    json_record = json.loads(record)
+    return len(json_record)
+
+
+
+#%%
+def replace_with_len(dataset, field, zero_class):
+    for index in range(0,dataset.shape[0]):
+        value = dataset.at[index,field]    
+        if(value != zero_class):
+            count = count_records_in_json(value)
+        else:
+            count = 0
+        dataset.at[index,field] = count
 
 
 
