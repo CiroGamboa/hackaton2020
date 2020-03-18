@@ -1,0 +1,15 @@
+{  
+    "Paths":{
+        "copToUsd":"datasets/dataDolar.xlsx",
+        "copToUsdCsv":"datasets/dataDolar.csv"
+    },
+    "LSTM":{
+        "numberOfNeurons":10,
+        "numberOfLayers":1,
+        "test_size":0.2,
+        "look_back":30,
+        "model_name": "onlyTRMinput",
+        "number_features": 1
+    }
+}
+
