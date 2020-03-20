@@ -163,22 +163,8 @@ for index, row in application_dataset.iterrows():
     
     
     # Controlar cantidad de iteraciones
-    cont+=1
-    if(cont==10):
-        break
+    #cont+=1
+    #if(cont==10):
+    #    break
 
-
-
-
-#%% 2. Con el id de application, se busca en applicationStage el id de las stages por application
-
-
-# 3. Si el stage_type es 0 o 1 y en applicationStage está el status en 'active' o 'accepted'
-# se agrega la vacante y el candidato a la clase '1' que sería ascendió
-
-
-# 4. Si no se cumple  con la condición 3, el candidato y la vacante van al 
-# la clase '0', que sería equivalente a que no ascendió
-
-
-
+final_dt.to_csv(r'reto1.csv', index = False, header=True)
