@@ -78,7 +78,7 @@ hackaUtils.replace_with_len(filtered_dt, column, zero_class)
 
 #%% Studies
 column = 'experiences'
-# Contar cuantos estudios hay por candidato y reemplazar los vacios por un cero
+# Contar cuantas experiencias hay por candidato y reemplazar los vacios por un cero
 zero_class = '[]'
 hackaUtils.replace_with_len(filtered_dt, column, zero_class)
 

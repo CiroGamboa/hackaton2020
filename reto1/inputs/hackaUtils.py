@@ -236,3 +236,12 @@ def replace_with_len(dataset, field, zero_class):
 
 
 
+#%%
+#def string_matches(strin1, strin2):
+#    avoid = ["la", "las", "lo", "los", "a", "al", "el", "de", "del", "con"
+#             "para", "por", "que", ]
+    
+
+
+
+
