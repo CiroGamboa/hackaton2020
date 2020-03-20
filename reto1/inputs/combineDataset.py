@@ -157,7 +157,7 @@ for index, row in application_dataset.iterrows():
             
             #a_row = pd.Series(help_dic)
             final_dt = final_dt.append(help_dic, ignore_index = True)
-            print(help_dic)
+            #print(help_dic)
         
             
     
